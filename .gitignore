@@ -1,0 +1,65 @@
+# Dependencies
+node_modules/
+
+# Dependency-based
+/p-lock.yaml
+/yarn.lock
+/pnpm-lock.yaml
+
+# Environment variables
+.env
+.env.local
+
+# Build output
+dist/
+build/
+/dist
+/build
+
+# Logs
+*.log
+/install.log
+
+# Runtime
+/.pids
+
+# Prisma schema
+server/prisma/*.db
+server/prisma/migrations/**/migration_lock.toml
+
+# Uploads
+server/uploads/*
+!server/uploads/.gitkeep
+
+# AWS S3 Credentials
+.wa-auth/
+
+# Editor directories and files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Production builds
+server/dist/
+web/dist/
+
+# Wrangler / Freebuff local runtime state
+.wrangler/
+
+# PID files & scratch logs
+logs/
+*.pid
+
+# Archives
+*.zip
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Reference copy of the upstream repo (local only)
+.ref-orig/
+# Vite cache
+.vite/

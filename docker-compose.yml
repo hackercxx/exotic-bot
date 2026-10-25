@@ -1,0 +1,82 @@
+# EXOTIC BOT — one command: docker compose up
+# Requires: .env (cp .env.example .env, set JWT_SECRET + ENCRYPTION_KEY + Meta vars)
+
+name: exotic-bot
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-exotic}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-exotic}
+      POSTGRES_DB: ${POSTGRES_DB:-exoticbot}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-exotic} -d ${POSTGRES_DB:-exoticbot}']
+      interval: 5s
+      timeout: 4s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ['redis-server', '--save', '60', '1', '--loglevel', 'warning']
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-exotic}:${POSTGRES_PASSWORD:-exotic}@db:5432/${POSTGRES_DB:-exoticbot}
+      REDIS_URL: redis://redis:6379
+      QUEUE_DRIVER: bullmq
+      WORKERS_ENABLED: '0' # the dedicated worker container runs jobs
+    ports:
+      - '${PORT:-4000}:4000'
+    volumes:
+      - uploads:/app/server/uploads
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-exotic}:${POSTGRES_PASSWORD:-exotic}@db:5432/${POSTGRES_DB:-exoticbot}
+      REDIS_URL: redis://redis:6379
+      QUEUE_DRIVER: bullmq
+      WORKERS_ENABLED: '1' # scheduler, reply pipeline, insights sync
+    volumes:
+      - uploads:/app/server/uploads
+    # no published ports — jobs only; API traffic goes through `app`
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

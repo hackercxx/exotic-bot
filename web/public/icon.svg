@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Exotic Bot">
+  <defs>
+    <linearGradient id="bg" x1="4" y1="4" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#171b2b"/>
+      <stop offset="1" stop-color="#070910"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="25" cy="23" r="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="planet" x1="18" y1="17" x2="47" y2="49" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="0.5" stop-color="#7c5cf6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.34" cy="0.28" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="8" y1="42" x2="56" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="0.5" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#f472b6"/>
+    </linearGradient>
+    <clipPath id="front">
+      <rect x="0" y="33" width="64" height="31"/>
+    </clipPath>
+  </defs>
+
+  <!-- deep-space tile -->
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="15" fill="url(#glow)"/>
+
+  <!-- orbit, segment behind the orb -->
+  <g transform="rotate(-28 32 32)">
+    <ellipse cx="32" cy="32" rx="25" ry="10" fill="none" stroke="url(#ring)" stroke-width="2.4" opacity="0.85"/>
+  </g>
+
+  <!-- the orb -->
+  <circle cx="32" cy="32" r="13.5" fill="url(#planet)"/>
+  <circle cx="32" cy="32" r="13.5" fill="url(#shine)"/>
+  <circle cx="32" cy="32" r="13.5" fill="none" stroke="#0b0e1a" stroke-opacity="0.35" stroke-width="1"/>
+
+  <!-- orbit, segment passing in front of the orb -->
+  <g clip-path="url(#front)">
+    <g transform="rotate(-28 32 32)">
+      <ellipse cx="32" cy="32" rx="25" ry="10" fill="none" stroke="url(#ring)" stroke-width="2.4"/>
+    </g>
+  </g>
+
+  <!-- satellite spark riding the far end of the orbit -->
+  <circle cx="54.1" cy="20.3" r="3.2" fill="#22d3ee" opacity="0.25"/>
+  <circle cx="54.1" cy="20.3" r="1.7" fill="#e8fbff"/>
+</svg>
