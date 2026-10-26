@@ -61,5 +61,8 @@ logs/
 
 # Reference copy of the upstream repo (local only)
 .ref-orig/
+
+# Local diagnostic screenshots
+artifacts/
 # Vite cache
 .vite/
